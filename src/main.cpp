@@ -3,8 +3,29 @@
 #include "vec3.h"
 
 
+bool HitSphere(const Point3& center, double radius, const Ray& ray)
+{
+    // Vector from ray's origin to sphere's center
+    const auto oc = ray.Origin() - center;
+
+    // Solve quadratic equation
+    const auto a = dot(ray.Direction(), ray.Direction());
+    const auto b = 2.0 * dot(oc, ray.Direction());
+    const auto c = dot(oc, oc) - radius*radius;
+    const auto discriminant = b*b - 4*a*c;
+
+    return (discriminant > 0);
+}
+
 Color RayColor(const Ray& ray)
 {
+    const auto red = Color(1, 0, 0);
+
+    if (HitSphere(Point3(0, 0, -1), 0.5, ray))
+    {
+        return red;
+    }
+
     // Normalize vector to [-1 < y < 1]
     const auto unit_direction = unit_vector(ray.Direction());
 
@@ -22,7 +43,7 @@ int main()
 {
     // Dimensions
     const auto aspect_ratio = 16.0 / 9.0;
-    const int width = 16;
+    const int width = 400;
     const int height = static_cast<int>(width / aspect_ratio);
 
     // Camera
