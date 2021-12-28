@@ -1,7 +1,6 @@
 #include "rt.h"
 #include "color.h"
-#include "ray.h"
-#include "vec3.h"
+#include "camera.h"
 #include "hittable_list.h"
 #include "sphere.h"
 
@@ -38,26 +37,13 @@ int main()
     const int width = 400;
     const int height = static_cast<int>(width / aspect_ratio);
 
+    // Camera
+    const auto camera = Camera(aspect_ratio);
+
     // World
     HittableList world;
     world.add(make_shared<Sphere>(Point3(0, 0, -1), 0.5));
     world.add(make_shared<Sphere>(Point3(0, -100.5, -1), 100));
-
-    // Camera
-    const auto viewport_height = 2.0;
-    const auto viewport_width = aspect_ratio * viewport_height;
-    const auto focal_length = 1.0;
-    const auto origin = Point3(0, 0, 0);
-
-    // Axis
-    const auto horizontal = Vec3(viewport_width, 0, 0); // X axis vector
-    const auto vertical = Vec3(0, viewport_height, 0);  // Y axis vector
-
-    // Viewport
-    const auto lower_left_corner = origin
-        - Vec3(0, 0, focal_length)  // Move onto viewport plane
-        - horizontal / 2            // Move left
-        - vertical / 2;             // Move down
 
     // Create PPM image
     // Header
@@ -74,14 +60,8 @@ int main()
             const auto u = static_cast<double>(x) / (width - 1);
             const auto v = static_cast<double>(y) / (height - 1);
 
-            // Calculate point on viewport
-            const auto p = lower_left_corner
-                + u * horizontal // Translate across x axis
-                + v * vertical   // Translate across y axis
-                - origin;        // Follow camera
-
             // Shoot ray into world
-            const auto ray = Ray(origin, p);
+            const auto ray = camera.GetRay(u, v);
 
             // Write pixel
             write_color(std::cout, RayColor(ray, world));
