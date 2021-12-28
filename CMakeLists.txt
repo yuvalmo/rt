@@ -4,6 +4,7 @@ project(rt)
 
 # Build main executable
 add_executable(rt
+    src/hittable_list.cpp
     src/main.cpp
     src/ray.cpp
     src/sphere.cpp

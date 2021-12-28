@@ -1,12 +1,11 @@
+#include "rt.h"
 #include "color.h"
 #include "ray.h"
 #include "vec3.h"
+#include "hittable_list.h"
 #include "sphere.h"
 
-#include <limits>
-
-
-const auto INFINITY = std::numeric_limits<double>::infinity();
+using std::make_shared;
 
 
 Color RayColor(const Ray& ray, const Hittable& world)
@@ -40,7 +39,9 @@ int main()
     const int height = static_cast<int>(width / aspect_ratio);
 
     // World
-    const auto world = Sphere(Point3(0, 0, -1), 0.5);
+    HittableList world;
+    world.add(make_shared<Sphere>(Point3(0, 0, -1), 0.5));
+    world.add(make_shared<Sphere>(Point3(0, -100.5, -1), 100));
 
     // Camera
     const auto viewport_height = 2.0;
