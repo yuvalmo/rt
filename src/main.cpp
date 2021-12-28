@@ -15,6 +15,8 @@ int main()
 
     for (int y = height - 1; y >= 0; --y)
     {
+        std::cerr << "\rScanlines remaining: " << y << ' ' << std::flush;
+
         for (int x = 0; x < width; ++x)
         {
             // Factor between 0 and 1
@@ -30,4 +32,6 @@ int main()
             std::cout << ir << ' ' << ig << ' ' << ib << '\n';
         }
     }
+
+    std::cerr << "\nDone.\n";
 }
