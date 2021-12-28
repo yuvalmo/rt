@@ -5,6 +5,7 @@ project(rt)
 # Build main executable
 add_executable(rt
     src/main.cpp
+    src/ray.cpp
     src/vec3.cpp
 )
 
