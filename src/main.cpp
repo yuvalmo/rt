@@ -2,8 +2,10 @@
 #include "ray.h"
 #include "vec3.h"
 
+#include <cmath>
 
-bool HitSphere(const Point3& center, double radius, const Ray& ray)
+
+double HitSphere(const Point3& center, double radius, const Ray& ray)
 {
     // Vector from ray's origin to sphere's center
     const auto oc = ray.Origin() - center;
@@ -14,29 +16,42 @@ bool HitSphere(const Point3& center, double radius, const Ray& ray)
     const auto c = dot(oc, oc) - radius*radius;
     const auto discriminant = b*b - 4*a*c;
 
-    return (discriminant > 0);
+    // No hit
+    if (discriminant < 0)
+    {
+        return -1.0;
+    }
+
+    // Calculate t for which the ray hits the sphere
+    return (-b - std::sqrt(discriminant)) / (2.0*a);
 }
 
 Color RayColor(const Ray& ray)
 {
-    const auto red = Color(1, 0, 0);
+    const auto center = Point3(0, 0, -1);
+    const auto t = HitSphere(center, 0.5, ray);
 
-    if (HitSphere(Point3(0, 0, -1), 0.5, ray))
+    // If there was a hit
+    if (t > 0.0)
     {
-        return red;
+        // Calculate surface normal
+        const auto N = unit_vector(ray.At(t) - center);
+
+        // Map normal to color
+        return 0.5 * (Color(1, 1, 1) + N);
     }
 
     // Normalize vector to [-1 < y < 1]
     const auto unit_direction = unit_vector(ray.Direction());
 
     // Scale to [0 < y < 1]
-    const auto t = 0.5 * (unit_direction.y() + 1.0);
+    const auto ty = 0.5 * (unit_direction.y() + 1.0);
 
     // Gradient between these two colors
     const auto white = Color(1.0, 1.0, 1.0);
     const auto blue  = Color(0.5, 0.7, 1.0);
 
-    return (1.0-t)*white + t*blue;
+    return (1.0-ty)*white + ty*blue;
 }
 
 int main()
