@@ -11,10 +11,10 @@ double HitSphere(const Point3& center, double radius, const Ray& ray)
     const auto oc = ray.Origin() - center;
 
     // Solve quadratic equation
-    const auto a = dot(ray.Direction(), ray.Direction());
-    const auto b = 2.0 * dot(oc, ray.Direction());
-    const auto c = dot(oc, oc) - radius*radius;
-    const auto discriminant = b*b - 4*a*c;
+    const auto a = ray.Direction().length_squared();
+    const auto half_b = dot(oc, ray.Direction());
+    const auto c = oc.length_squared() - radius*radius;
+    const auto discriminant = half_b*half_b - a*c;
 
     // No hit
     if (discriminant < 0)
@@ -23,7 +23,7 @@ double HitSphere(const Point3& center, double radius, const Ray& ray)
     }
 
     // Calculate t for which the ray hits the sphere
-    return (-b - std::sqrt(discriminant)) / (2.0*a);
+    return (-half_b - std::sqrt(discriminant)) / a;
 }
 
 Color RayColor(const Ray& ray)
