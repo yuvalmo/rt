@@ -1,57 +1,35 @@
 #include "color.h"
 #include "ray.h"
 #include "vec3.h"
+#include "sphere.h"
 
-#include <cmath>
+#include <limits>
 
 
-double HitSphere(const Point3& center, double radius, const Ray& ray)
+const auto INFINITY = std::numeric_limits<double>::infinity();
+
+
+Color RayColor(const Ray& ray, const Hittable& world)
 {
-    // Vector from ray's origin to sphere's center
-    const auto oc = ray.Origin() - center;
+    HitRecord hit;
 
-    // Solve quadratic equation
-    const auto a = ray.Direction().length_squared();
-    const auto half_b = dot(oc, ray.Direction());
-    const auto c = oc.length_squared() - radius*radius;
-    const auto discriminant = half_b*half_b - a*c;
-
-    // No hit
-    if (discriminant < 0)
+    // Check for hits
+    if (world.Hit(ray, 0, INFINITY, hit))
     {
-        return -1.0;
-    }
-
-    // Calculate t for which the ray hits the sphere
-    return (-half_b - std::sqrt(discriminant)) / a;
-}
-
-Color RayColor(const Ray& ray)
-{
-    const auto center = Point3(0, 0, -1);
-    const auto t = HitSphere(center, 0.5, ray);
-
-    // If there was a hit
-    if (t > 0.0)
-    {
-        // Calculate surface normal
-        const auto N = unit_vector(ray.At(t) - center);
-
-        // Map normal to color
-        return 0.5 * (Color(1, 1, 1) + N);
+        return 0.5 * (Color(1, 1, 1) + hit.normal);
     }
 
     // Normalize vector to [-1 < y < 1]
     const auto unit_direction = unit_vector(ray.Direction());
 
     // Scale to [0 < y < 1]
-    const auto ty = 0.5 * (unit_direction.y() + 1.0);
+    const auto t = 0.5 * (unit_direction.y() + 1.0);
 
     // Gradient between these two colors
     const auto white = Color(1.0, 1.0, 1.0);
     const auto blue  = Color(0.5, 0.7, 1.0);
 
-    return (1.0-ty)*white + ty*blue;
+    return (1.0-t)*white + t*blue;
 }
 
 int main()
@@ -60,6 +38,9 @@ int main()
     const auto aspect_ratio = 16.0 / 9.0;
     const int width = 400;
     const int height = static_cast<int>(width / aspect_ratio);
+
+    // World
+    const auto world = Sphere(Point3(0, 0, -1), 0.5);
 
     // Camera
     const auto viewport_height = 2.0;
@@ -102,7 +83,7 @@ int main()
             const auto ray = Ray(origin, p);
 
             // Write pixel
-            write_color(std::cout, RayColor(ray));
+            write_color(std::cout, RayColor(ray, world));
         }
     }
 

@@ -6,6 +6,7 @@ project(rt)
 add_executable(rt
     src/main.cpp
     src/ray.cpp
+    src/sphere.cpp
     src/vec3.cpp
 )
 
