@@ -4,17 +4,14 @@ project(rt)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
-set(CMAKE_CXX_FLAGS_RELEASE "-O3")
+set(CMAKE_CXX_FLAGS_RELEASE "-O3 -flto")
+
+# Find source files
+file(GLOB SOURCES src/*.cpp)
 
 # Build main executable
 add_executable(rt
-    src/camera.cpp
-    src/hittable_list.cpp
-    src/lambertian.cpp
-    src/main.cpp
-    src/ray.cpp
-    src/sphere.cpp
-    src/vec3.cpp
+    ${SOURCES}
 )
 
 # Test

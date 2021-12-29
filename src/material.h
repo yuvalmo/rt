@@ -18,10 +18,10 @@ public:
      *
      * @param ray            Hitting ray
      * @param hit            Hit details
-     * @param o_attenuation  ?
+     * @param o_attenuation  How much the ray should be attenuated
      * @param o_scattered    New incident ray
      *
-     * @return true if scattered.
+     * @return true if ray was scattered.
      *         false if ray was absorbed.
      */
     virtual bool Scatter(const Ray& ray,
