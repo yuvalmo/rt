@@ -96,3 +96,9 @@ Vec3 Vec3::random_in_unit_sphere()
         return p;
     }
 }
+
+Vec3 Vec3::random_unit_vector()
+{
+    // Normalize vector onto the surface of the sphere
+    return unit_vector(random_in_unit_sphere());
+}

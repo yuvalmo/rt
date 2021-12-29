@@ -28,6 +28,7 @@ public:
     static Vec3 random();
     static Vec3 random(double min, double max);
     static Vec3 random_in_unit_sphere();
+    static Vec3 random_unit_vector();
 
 public:
     double e[3];
