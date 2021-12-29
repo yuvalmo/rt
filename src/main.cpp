@@ -4,16 +4,10 @@
 #include "hittable_list.h"
 #include "sphere.h"
 #include "random.h"
-#include "material.h"
+#include "lambertian.h"
 
 using std::make_shared;
 
-
-class DummyMaterial : public Material
-{
-    bool Scatter(const Ray&, const HitRecord&, Color&, Ray&) const
-    { return false; };
-};
 
 Color RayColor(const Ray& ray, const Hittable& world, int depth)
 {
@@ -29,16 +23,18 @@ Color RayColor(const Ray& ray, const Hittable& world, int depth)
     // Check for hits
     if (world.Hit(ray, 0.001, INFINITY, hit))
     {
-        // Choose point inside tangent sphere
-        const auto target = hit.p
-            + hit.normal                   // Move to sphere center
-            + Vec3::random_unit_vector();  // Move to random point on sphere
+        Ray scattered;
+        Color attenuation;
 
-        // Generate a bounce ray from hit point to that point
-        const auto bounce = Ray(hit.p, target - hit.p);
+        if (hit.material->Scatter(ray, hit, attenuation, scattered))
+        {
+            // Gather the color of the scattered ray, and factor out
+            // absorbed light.
+            return attenuation * RayColor(scattered, world, depth-1);
+        }
 
-        // And gather its color
-        return 0.5 * RayColor(bounce, world, depth-1);
+        // Light was fully absorbed
+        return {0, 0, 0};
     }
 
     // Normalize vector to [-1 < y < 1]
@@ -67,12 +63,13 @@ int main()
     const auto camera = Camera(aspect_ratio);
 
     // Materials
-    const auto mat = make_shared<DummyMaterial>();
+    const auto mat_ground = make_shared<Lambertian>(Color(0.8, 0.8, 0.0));
+    const auto mat_center = make_shared<Lambertian>(Color(0.7, 0.3, 0.3));
 
     // World
     HittableList world;
-    world.add(make_shared<Sphere>(Point3(0, 0, -1), 0.5, mat));
-    world.add(make_shared<Sphere>(Point3(0, -100.5, -1), 100, mat));
+    world.add(make_shared<Sphere>(Point3(0, 0, -1), 0.5, mat_center));
+    world.add(make_shared<Sphere>(Point3(0, -100.5, -1), 100, mat_ground));
 
     // Create PPM image
     // Header

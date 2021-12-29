@@ -10,6 +10,7 @@ set(CMAKE_CXX_FLAGS_RELEASE "-O3")
 add_executable(rt
     src/camera.cpp
     src/hittable_list.cpp
+    src/lambertian.cpp
     src/main.cpp
     src/ray.cpp
     src/sphere.cpp
