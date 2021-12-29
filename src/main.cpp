@@ -3,6 +3,7 @@
 #include "camera.h"
 #include "hittable_list.h"
 #include "sphere.h"
+#include "random.h"
 
 using std::make_shared;
 
@@ -36,6 +37,7 @@ int main()
     const auto aspect_ratio = 16.0 / 9.0;
     const int width = 400;
     const int height = static_cast<int>(width / aspect_ratio);
+    const int samples_per_pixel = 100;
 
     // Camera
     const auto camera = Camera(aspect_ratio);
@@ -57,14 +59,23 @@ int main()
 
         for (int x = 0; x < width; ++x)
         {
-            const auto u = static_cast<double>(x) / (width - 1);
-            const auto v = static_cast<double>(y) / (height - 1);
+            Color pixel;
 
-            // Shoot ray into world
-            const auto ray = camera.GetRay(u, v);
+            for (int sample = 0; sample < samples_per_pixel; ++sample)
+            {
+                // Choose a random point inside the pixel
+                const auto u = (static_cast<double>(x) + random_double()) / (width - 1);
+                const auto v = (static_cast<double>(y) + random_double()) / (height - 1);
+
+                // Shoot ray into world
+                const auto ray = camera.GetRay(u, v);
+
+                // Accumulate color for each sample
+                pixel += RayColor(ray, world);
+            }
 
             // Write pixel
-            write_color(std::cout, RayColor(ray, world));
+            write_color(std::cout, pixel, samples_per_pixel);
         }
     }
 

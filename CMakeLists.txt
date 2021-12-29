@@ -2,6 +2,9 @@ cmake_minimum_required(VERSION 3.16)
 
 project(rt)
 
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED True)
+
 # Build main executable
 add_executable(rt
     src/camera.cpp
