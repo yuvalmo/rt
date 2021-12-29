@@ -25,7 +25,7 @@ Color RayColor(const Ray& ray, const Hittable& world, int depth)
         // Choose point inside tangent sphere
         const auto target = hit.p
             + hit.normal                   // Move to sphere center
-            + Vec3::random_unit_vector();  // Move to random point in sphere
+            + Vec3::random_unit_vector();  // Move to random point on sphere
 
         // Generate a bounce ray from hit point to that point
         const auto bounce = Ray(hit.p, target - hit.p);

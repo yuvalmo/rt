@@ -29,6 +29,7 @@ public:
     static Vec3 random(double min, double max);
     static Vec3 random_in_unit_sphere();
     static Vec3 random_unit_vector();
+    static Vec3 random_in_hemisphere(const Vec3& normal);
 
 public:
     double e[3];

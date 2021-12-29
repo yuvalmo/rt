@@ -102,3 +102,19 @@ Vec3 Vec3::random_unit_vector()
     // Normalize vector onto the surface of the sphere
     return unit_vector(random_in_unit_sphere());
 }
+
+Vec3 Vec3::random_in_hemisphere(const Vec3& normal)
+{
+    const auto v = random_in_unit_sphere();
+
+    // If it points in the same overall direction of
+    // the normal (in the same hemisphere)
+    if (dot(v, normal) > 0.0)
+    {
+        return v;
+    }
+
+    // Should be flipped to point in the same
+    // direction of the normal
+    return -v;
+}
