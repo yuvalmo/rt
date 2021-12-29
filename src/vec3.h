@@ -24,6 +24,12 @@ public:
     Vec3& operator/=(const double t);    // Divide vector
 
 public:
+    // Get random vectors
+    static Vec3 random();
+    static Vec3 random(double min, double max);
+    static Vec3 random_in_unit_sphere();
+
+public:
     double e[3];
 };
 

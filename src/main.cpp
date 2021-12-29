@@ -8,14 +8,30 @@
 using std::make_shared;
 
 
-Color RayColor(const Ray& ray, const Hittable& world)
+Color RayColor(const Ray& ray, const Hittable& world, int depth)
 {
     HitRecord hit;
+
+    // Check if we reached the ray bounce limit, in which case
+    // no more light is gathered.
+    if (depth <= 0)
+    {
+        return {0, 0, 0};
+    }
 
     // Check for hits
     if (world.Hit(ray, 0, INFINITY, hit))
     {
-        return 0.5 * (Color(1, 1, 1) + hit.normal);
+        // Choose point inside tangent sphere
+        const auto target = hit.p
+            + hit.normal                      // Move to sphere center// Move to random point in sphere
+            + Vec3::random_in_unit_sphere();  // Move to random point in sphere
+
+        // Generate a bounce ray from hit point to that point
+        const auto bounce = Ray(hit.p, target - hit.p);
+
+        // And gather its color
+        return 0.5 * RayColor(bounce, world, depth-1);
     }
 
     // Normalize vector to [-1 < y < 1]
@@ -38,6 +54,7 @@ int main()
     const int width = 400;
     const int height = static_cast<int>(width / aspect_ratio);
     const int samples_per_pixel = 100;
+    const int max_depth = 50;
 
     // Camera
     const auto camera = Camera(aspect_ratio);
@@ -71,7 +88,7 @@ int main()
                 const auto ray = camera.GetRay(u, v);
 
                 // Accumulate color for each sample
-                pixel += RayColor(ray, world);
+                pixel += RayColor(ray, world, max_depth);
             }
 
             // Write pixel

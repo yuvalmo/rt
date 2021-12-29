@@ -1,4 +1,6 @@
 #include "vec3.h"
+#include "random.h"
+
 #include <cmath>
 
 /**
@@ -61,4 +63,36 @@ Vec3& Vec3::operator*=(const double t)
 Vec3& Vec3::operator/=(const double t)
 {
     return this->operator*=(1/t);
+}
+
+Vec3 Vec3::random()
+{
+    return {
+        random_double(),
+        random_double(),
+        random_double()
+    };
+}
+
+Vec3 Vec3::random(double min, double max)
+{
+    return {
+        random_double(min, max),
+        random_double(min, max),
+        random_double(min, max)
+    };
+}
+
+Vec3 Vec3::random_in_unit_sphere()
+{
+    while (true)
+    {
+        const auto p = Vec3::random(-1, 1);
+
+        // Check if point is inside unit sphere
+        if (p.length_squared() >= 1)
+            continue;
+
+        return p;
+    }
 }
