@@ -5,13 +5,21 @@
 
 #include "ray.h"
 
+#include <memory>
+
+// Forward declaration
+class Material;
+
+// Typedef for convenience
+using MaterialPtr = std::shared_ptr<Material>;
 
 struct HitRecord
 {
-    Point3 p;         // Point of hit
-    Vec3 normal;      // Surface normal
-    double t;         // t for which the ray hits
-    bool front_face;  // Whether the ray hit a front or back face
+    Point3 p;             // Point of hit
+    Vec3 normal;          // Surface normal
+    MaterialPtr material; // Surface material
+    double t;             // t for which the ray hits
+    bool front_face;      // Whether the ray hit a front or back face
 
     inline void SetFaceNormal(const Ray& ray, const Vec3& outward_normal)
     {

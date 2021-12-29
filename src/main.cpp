@@ -4,9 +4,16 @@
 #include "hittable_list.h"
 #include "sphere.h"
 #include "random.h"
+#include "material.h"
 
 using std::make_shared;
 
+
+class DummyMaterial : public Material
+{
+    bool Scatter(const Ray&, const HitRecord&, Color&, Ray&) const
+    { return false; };
+};
 
 Color RayColor(const Ray& ray, const Hittable& world, int depth)
 {
@@ -59,10 +66,13 @@ int main()
     // Camera
     const auto camera = Camera(aspect_ratio);
 
+    // Materials
+    const auto mat = make_shared<DummyMaterial>();
+
     // World
     HittableList world;
-    world.add(make_shared<Sphere>(Point3(0, 0, -1), 0.5));
-    world.add(make_shared<Sphere>(Point3(0, -100.5, -1), 100));
+    world.add(make_shared<Sphere>(Point3(0, 0, -1), 0.5, mat));
+    world.add(make_shared<Sphere>(Point3(0, -100.5, -1), 100, mat));
 
     // Create PPM image
     // Header

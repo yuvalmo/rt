@@ -9,7 +9,7 @@ class Sphere : public Hittable
 {
 public:
     Sphere() = default;
-    Sphere(Point3 center, double radius);
+    Sphere(Point3 center, double radius, MaterialPtr material);
 
     bool Hit(const Ray& ray,
              double t_min,
@@ -19,4 +19,5 @@ public:
 private:
     Point3 m_center;
     double m_radius;
+    MaterialPtr m_material;
 };

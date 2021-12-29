@@ -2,8 +2,8 @@
 
 #include <cmath>
 
-Sphere::Sphere(Point3 center, double radius)
-    : m_center(center), m_radius(radius)
+Sphere::Sphere(Point3 center, double radius, MaterialPtr material)
+    : m_center(center), m_radius(radius), m_material(material)
 {}
 
 bool Sphere::Hit(const Ray& ray,
@@ -36,6 +36,7 @@ bool Sphere::Hit(const Ray& ray,
 
     o_rec.t = root;
     o_rec.p = ray.At(root);
+    o_rec.material = m_material;
 
     // Make normal face ray
     const auto outward_normal = (o_rec.p - m_center) / m_radius;
