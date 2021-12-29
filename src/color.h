@@ -5,8 +5,9 @@
 
 #include "vec3.h"
 
-#include <iostream>
 #include <algorithm>
+#include <cmath>
+#include <iostream>
 
 void write_color(std::ostream& os, Color pixel_color, int samples_per_pixel)
 {
@@ -17,11 +18,16 @@ void write_color(std::ostream& os, Color pixel_color, int samples_per_pixel)
     // Average the samples
     const auto c = pixel_color / samples_per_pixel;
 
+    // Gamma-correct for gamma = 2.
+    auto r = std::sqrt(c.x());
+    auto g = std::sqrt(c.y());
+    auto b = std::sqrt(c.z());
+
     // Convert to [0,255] range. The clamp is to pull 256
     // back into the wanted range.
-    const auto r = COLOR_MAX * std::clamp(c.x(), 0.0, 0.999);
-    const auto g = COLOR_MAX * std::clamp(c.y(), 0.0, 0.999);
-    const auto b = COLOR_MAX * std::clamp(c.z(), 0.0, 0.999);
+    r = COLOR_MAX * std::clamp(r, 0.0, 0.999);
+    g = COLOR_MAX * std::clamp(g, 0.0, 0.999);
+    b = COLOR_MAX * std::clamp(b, 0.0, 0.999);
 
     os << static_cast<int>(r) << ' '
        << static_cast<int>(g) << ' '
