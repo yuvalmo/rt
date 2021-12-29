@@ -14,6 +14,7 @@ public:
     double z() const;
     double length() const;
     double length_squared() const;
+    bool near_zero() const;
 
     // Operators
     Vec3 operator-() const;              // Reverse vector

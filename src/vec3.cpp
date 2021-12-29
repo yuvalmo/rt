@@ -2,6 +2,11 @@
 #include "random.h"
 
 #include <cmath>
+#include <algorithm>
+
+using std::all_of;
+using std::begin;
+using std::end;
 
 /**
  * Getters
@@ -23,6 +28,16 @@ double Vec3::length() const
 double Vec3::length_squared() const
 {
     return e[0]*e[0] + e[1]*e[1] + e[2]*e[2];
+}
+
+bool Vec3::near_zero() const
+{
+    const auto s = 1e-8;
+
+    // Check if close to zero in all dimensions
+    return all_of(begin(e), end(e), [&s](const double x) {
+        return fabs(x) < s;
+    });
 }
 
 /**
