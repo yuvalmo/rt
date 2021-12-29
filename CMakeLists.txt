@@ -4,6 +4,7 @@ project(rt)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
+set(CMAKE_CXX_FLAGS_RELEASE "-O3")
 
 # Build main executable
 add_executable(rt
