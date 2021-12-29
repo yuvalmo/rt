@@ -20,7 +20,7 @@ Color RayColor(const Ray& ray, const Hittable& world, int depth)
     }
 
     // Check for hits
-    if (world.Hit(ray, 0, INFINITY, hit))
+    if (world.Hit(ray, 0.001, INFINITY, hit))
     {
         // Choose point inside tangent sphere
         const auto target = hit.p

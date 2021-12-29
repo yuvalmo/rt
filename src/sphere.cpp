@@ -34,7 +34,6 @@ bool Sphere::Hit(const Ray& ray,
             return false;
     }
 
-
     o_rec.t = root;
     o_rec.p = ray.At(root);
 
