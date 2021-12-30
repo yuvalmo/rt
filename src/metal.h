@@ -9,7 +9,7 @@
 class Metal : public Material
 {
 public:
-    Metal(const Color& albedo);
+    Metal(const Color& albedo, double fuzz);
 
     bool Scatter(const Ray& ray,
                  const HitRecord& hit,
@@ -18,4 +18,5 @@ public:
 
 private:
     Color m_albedo;
+    double m_fuzz;
 };
