@@ -48,15 +48,12 @@ Vec3 Vec3::operator-() const
     return Vec3(-e[0], -e[1], -e[2]);
 }
 
-// Get element
 double Vec3::operator[](int i) const
 { return e[i]; }
 
-// Get element ref
 double& Vec3::operator[](int i)
 { return e[i]; }
 
-// Add vector
 Vec3& Vec3::operator+=(const Vec3& other)
 {
     e[0] += other.e[0];
@@ -65,7 +62,6 @@ Vec3& Vec3::operator+=(const Vec3& other)
     return *this;
 }
 
-// Multiply vector
 Vec3& Vec3::operator*=(const double t)
 {
     e[0] *= t;
@@ -74,7 +70,6 @@ Vec3& Vec3::operator*=(const double t)
     return *this;
 }
 
-// Divide vector
 Vec3& Vec3::operator/=(const double t)
 {
     return this->operator*=(1/t);
@@ -132,4 +127,15 @@ Vec3 Vec3::random_in_hemisphere(const Vec3& normal)
     // Should be flipped to point in the same
     // direction of the normal
     return -v;
+}
+
+Vec3 Vec3::reflect(const Vec3& v, const Vec3& n)
+{
+    const auto b =
+        n            // Position along normal.
+        * dot(v, n); // Scale according to angle and length of v.
+
+    // Flip sign because the normal faces v, so the
+    // dot product should be negative.
+    return v - 2*b;
 }

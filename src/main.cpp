@@ -5,6 +5,7 @@
 #include "sphere.h"
 #include "random.h"
 #include "lambertian.h"
+#include "metal.h"
 
 using std::make_shared;
 
@@ -65,11 +66,15 @@ int main()
     // Materials
     const auto mat_ground = make_shared<Lambertian>(Color(0.8, 0.8, 0.0));
     const auto mat_center = make_shared<Lambertian>(Color(0.7, 0.3, 0.3));
+    const auto mat_left   = make_shared<Metal>(Color(0.8, 0.8, 0.8));
+    const auto mat_right  = make_shared<Metal>(Color(0.8, 0.6, 0.2));
 
     // World
     HittableList world;
-    world.add(make_shared<Sphere>(Point3(0, 0, -1), 0.5, mat_center));
-    world.add(make_shared<Sphere>(Point3(0, -100.5, -1), 100, mat_ground));
+    world.add(make_shared<Sphere>(Point3( 0.0, -100.5, -1.0), 100.0, mat_ground));
+    world.add(make_shared<Sphere>(Point3( 0.0,    0.0, -1.0),   0.5, mat_center));
+    world.add(make_shared<Sphere>(Point3(-1.0,    0.0, -1.0),   0.5, mat_left));
+    world.add(make_shared<Sphere>(Point3( 1.0,    0.0, -1.0),   0.5, mat_right));
 
     // Create PPM image
     // Header

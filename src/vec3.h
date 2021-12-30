@@ -32,6 +32,10 @@ public:
     static Vec3 random_unit_vector();
     static Vec3 random_in_hemisphere(const Vec3& normal);
 
+    // Reflect vector across normal
+    static Vec3 reflect(const Vec3& vector,
+                        const Vec3& normal);
+
 public:
     double e[3];
 };
