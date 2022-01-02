@@ -6,6 +6,7 @@
 #include "random.h"
 #include "lambertian.h"
 #include "metal.h"
+#include "dielectric.h"
 
 using std::make_shared;
 
@@ -65,8 +66,8 @@ int main()
 
     // Materials
     const auto mat_ground = make_shared<Lambertian>(Color(0.8, 0.8, 0.0));
-    const auto mat_center = make_shared<Lambertian>(Color(0.7, 0.3, 0.3));
-    const auto mat_left   = make_shared<Metal>(Color(0.8, 0.8, 0.8), 0.3);
+    const auto mat_center = make_shared<Lambertian>(Color(0.1, 0.2, 0.5));
+    const auto mat_left   = make_shared<Dielectric>(1.5);
     const auto mat_right  = make_shared<Metal>(Color(0.8, 0.6, 0.2), 1.0);
 
     // World

@@ -36,6 +36,11 @@ public:
     static Vec3 reflect(const Vec3& vector,
                         const Vec3& normal);
 
+    // Refract vector across normal
+    static Vec3 refract(const Vec3& uv,
+                        const Vec3& normal,
+                        double etai_over_etat);
+
 public:
     double e[3];
 };
