@@ -63,13 +63,17 @@ int main()
     const int max_depth = 50;
 
     // Camera
-    const auto camera = Camera(90.0, aspect_ratio);
+    const auto camera = Camera(Point3(-2, 2, 1),
+                               Point3(0, 0, -1),
+                               Vec3(0, 1, 0),
+                               20.0,
+                               aspect_ratio);
 
     // Materials
     const auto mat_ground = make_shared<Lambertian>(Color(0.8, 0.8, 0.0));
     const auto mat_center = make_shared<Lambertian>(Color(0.1, 0.2, 0.5));
     const auto mat_left   = make_shared<Dielectric>(1.5);
-    const auto mat_right  = make_shared<Metal>(Color(0.8, 0.6, 0.2), 1.0);
+    const auto mat_right  = make_shared<Metal>(Color(0.8, 0.6, 0.2), 0.0);
 
     // World
     HittableList world;

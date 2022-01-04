@@ -8,7 +8,10 @@
 class Camera
 {
 public:
-    Camera(double vfov,
+    Camera(Point3 lookfrom,
+           Point3 lookat,
+           Vec3 vup,
+           double vfov,
            double aspect_ratio);
 
     /**
