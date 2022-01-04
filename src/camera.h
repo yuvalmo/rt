@@ -8,7 +8,8 @@
 class Camera
 {
 public:
-    Camera(double aspect_ratio);
+    Camera(double vfov,
+           double aspect_ratio);
 
     /**
      * Get ray pointing at pixel at (u, v).

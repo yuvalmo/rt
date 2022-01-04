@@ -1,9 +1,19 @@
 #include "camera.h"
+#include "math_utils.h"
 
-Camera::Camera(double aspect_ratio)
+double to_radians(double degrees)
 {
+    return degrees * PI / 180.0;
+}
+
+Camera::Camera(double vfov, double aspect_ratio)
+{
+    // Calculate field of vision
+    const auto theta = to_radians(vfov);
+    const auto h = tan(theta / 2);
+
     // Camera
-    const auto viewport_height = 2.0;
+    const auto viewport_height = 2.0 * h;
     const auto viewport_width = aspect_ratio * viewport_height;
     const auto focal_length = 1.0;
 

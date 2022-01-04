@@ -7,6 +7,7 @@
 #include "lambertian.h"
 #include "metal.h"
 #include "dielectric.h"
+#include "math_utils.h"
 
 using std::make_shared;
 
@@ -62,7 +63,7 @@ int main()
     const int max_depth = 50;
 
     // Camera
-    const auto camera = Camera(aspect_ratio);
+    const auto camera = Camera(90.0, aspect_ratio);
 
     // Materials
     const auto mat_ground = make_shared<Lambertian>(Color(0.8, 0.8, 0.0));
