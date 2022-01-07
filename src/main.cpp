@@ -65,6 +65,7 @@ int main()
     const auto lookfrom   = Point3(3, 3, 2);
     const auto lookat     = Point3(0, 0, -1);
     const auto focus_dist = (lookfrom-lookat).length();
+    const auto aperture   = 2.0;
 
     // Camera
     const auto camera = Camera(lookfrom,
@@ -72,6 +73,7 @@ int main()
                                Vec3(0, 1, 0),
                                20.0,
                                aspect_ratio,
+                               aperture,
                                focus_dist);
 
     // Materials

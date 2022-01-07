@@ -13,6 +13,7 @@ public:
            Vec3 vup,
            double vfov,
            double aspect_ratio,
+           double aperture,
            double focus_dist);
 
     /**
@@ -28,4 +29,5 @@ private:
     Vec3   m_cz;
     Vec3   m_cx;
     Vec3   m_cy;
+    double m_lens_radius;
 };

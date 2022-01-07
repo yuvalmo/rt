@@ -11,6 +11,7 @@ Camera::Camera(Point3 lookfrom,
                Vec3 vup,
                double vfov,
                double aspect_ratio,
+               double aperture,
                double focus_dist)
 {
     // Calculate field of vision
@@ -41,13 +42,16 @@ Camera::Camera(Point3 lookfrom,
         + m_cz * focus_dist  // Move onto viewport plane
         - m_horizontal / 2   // Move left
         - m_vertical / 2;    // Move down
+
+    // Lens radius
+    m_lens_radius = aperture / 2;
 }
 
 Ray Camera::GetRay(double u, double v) const
 {
     // Generate random point in disk and rotate
     // it to camera's axes.
-    const auto rd = Vec3::random_in_unit_disk();
+    const auto rd = Vec3::random_in_unit_disk() * m_lens_radius;
     const auto offset = m_cx * rd.x() +
                         m_cy * rd.y();
 
