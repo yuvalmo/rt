@@ -62,12 +62,17 @@ int main()
     const int samples_per_pixel = 100;
     const int max_depth = 50;
 
+    const auto lookfrom   = Point3(3, 3, 2);
+    const auto lookat     = Point3(0, 0, -1);
+    const auto focus_dist = (lookfrom-lookat).length();
+
     // Camera
-    const auto camera = Camera(Point3(-2, 2, 1),
-                               Point3(0, 0, -1),
+    const auto camera = Camera(lookfrom,
+                               lookat,
                                Vec3(0, 1, 0),
                                20.0,
-                               aspect_ratio);
+                               aspect_ratio,
+                               focus_dist);
 
     // Materials
     const auto mat_ground = make_shared<Lambertian>(Color(0.8, 0.8, 0.0));

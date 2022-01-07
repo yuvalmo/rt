@@ -129,6 +129,23 @@ Vec3 Vec3::random_in_hemisphere(const Vec3& normal)
     return -v;
 }
 
+Vec3 Vec3::random_in_unit_disk()
+{
+    while (true)
+    {
+        // Generate coordinates
+        const auto x = random_double(-1, 1);
+        const auto y = random_double(-1, 1);
+        const auto p = Vec3(x, y, 0);
+
+        // Check if outside disk
+        if (p.length_squared() > 1.0)
+            continue;
+
+        return p;
+    }
+}
+
 Vec3 Vec3::reflect(const Vec3& v, const Vec3& n)
 {
     const auto b =
