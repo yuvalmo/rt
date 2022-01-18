@@ -16,15 +16,11 @@ CheckerTexture::CheckerTexture(std::shared_ptr<Texture> even,
 
 Color CheckerTexture::Value(double u, double v, const Point3& p) const
 {
-    // The number of strips going from top to bottom (f is for frequency).
-    const auto f = 40;
+    const auto sines = sin(10*p.x()) *
+                       sin(10*p.y()) *
+                       sin(10*p.z());
 
-    // Multiply u by 2 because it travels twice the distance.
-    // This makes the tiles square, instead of streching them.
-    const auto even_u = int(u*2*f) % 2 == 0;
-    const auto even_v = int(v*f) % 2 == 0;
-
-    return (even_u == even_v)
+    return (sines < 0)
         ? m_odd->Value(u, v, p)
         : m_even->Value(u, v, p);
 }
