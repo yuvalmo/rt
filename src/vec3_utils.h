@@ -3,7 +3,7 @@
  */
 #pragma once
 
-#include "vec3.h"
+#include <vec3.h>
 #include <iostream>
 
 inline std::ostream& operator<<(std::ostream& os, const Vec3& v)

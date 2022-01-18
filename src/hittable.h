@@ -3,7 +3,7 @@
  */
 #pragma once
 
-#include "ray.h"
+#include <ray.h>
 
 #include <memory>
 

@@ -3,8 +3,8 @@
  */
 #pragma once
 
-#include "hittable.h"
-#include "ray.h"
+#include <hittable.h>
+#include <ray.h>
 
 
 class Material

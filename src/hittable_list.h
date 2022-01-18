@@ -3,7 +3,7 @@
  */
 #pragma once
 
-#include "hittable.h"
+#include <hittable.h>
 
 #include <memory>
 #include <vector>

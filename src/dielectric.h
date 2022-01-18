@@ -3,7 +3,7 @@
  */
 #pragma once
 
-#include "material.h"
+#include <material.h>
 
 class Dielectric : public Material
 {
