@@ -8,6 +8,7 @@ set(CMAKE_CXX_FLAGS_RELEASE "-O3 -flto")
 
 # Include path
 include_directories(src)
+include_directories(third-party)
 
 # Find source files
 file(GLOB_RECURSE SOURCES src/*.cpp)
