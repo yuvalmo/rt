@@ -5,12 +5,14 @@
 #pragma once
 
 #include <material.h>
+#include <texture/texture.h>
 
 
 class Lambertian : public Material
 {
 public:
     Lambertian(const Color& albedo);
+    Lambertian(std::shared_ptr<Texture> texture);
 
     bool Scatter(const Ray& ray,
                  const HitRecord& hit,
@@ -26,5 +28,5 @@ private:
      *  0 is fully absorbent ("black body").
      *  1 is fully reflective.
      */
-    Color m_albedo;
+    std::shared_ptr<Texture> m_albedo;
 };

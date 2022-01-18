@@ -1,7 +1,12 @@
 #include "lambertian.h"
+#include <texture/solid_color.h>
 
 Lambertian::Lambertian(const Color& albedo)
-    : m_albedo(albedo)
+    : m_albedo(std::make_shared<SolidColor>(albedo))
+{}
+
+Lambertian::Lambertian(std::shared_ptr<Texture> texture)
+    : m_albedo(texture)
 {}
 
 bool Lambertian::Scatter(const Ray& ray,
@@ -22,7 +27,7 @@ bool Lambertian::Scatter(const Ray& ray,
 
     // Generate a bounce ray from hit point to that point
     o_scattered = Ray(hit.p, scatter_direction);
-    o_attenuation = m_albedo;
+    o_attenuation = m_albedo->Value(hit.u, hit.v, hit.p);
 
     return true;
 }

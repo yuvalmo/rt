@@ -9,6 +9,8 @@
 #include "dielectric.h"
 #include "math_utils.h"
 
+#include "texture/checker.h"
+
 using std::make_shared;
 
 
@@ -62,10 +64,10 @@ int main()
     const int samples_per_pixel = 100;
     const int max_depth = 50;
 
-    const auto lookfrom   = Point3(3, 3, 2);
+    const auto lookfrom   = Point3(0, 1, 3);
     const auto lookat     = Point3(0, 0, -1);
     const auto focus_dist = (lookfrom-lookat).length();
-    const auto aperture   = 2.0;
+    const auto aperture   = 0.05;
 
     // Camera
     const auto camera = Camera(lookfrom,
@@ -77,18 +79,17 @@ int main()
                                focus_dist);
 
     // Materials
-    const auto mat_ground = make_shared<Lambertian>(Color(0.8, 0.8, 0.0));
-    const auto mat_center = make_shared<Lambertian>(Color(0.1, 0.2, 0.5));
-    const auto mat_left   = make_shared<Dielectric>(1.5);
-    const auto mat_right  = make_shared<Metal>(Color(0.8, 0.6, 0.2), 0.0);
+    const auto ground   = make_shared<Lambertian>(Color(0.8, 0.8, 0.0));
+    const auto metal    = make_shared<Metal>(Color(0.5, 0.5, 0.5), 0.1);
+    const auto checkers = make_shared<Lambertian>(
+        make_shared<CheckerTexture>(Color(0.0, 0.0, 0.0),
+                                    Color(1.0, 1.0, 1.0)));
 
     // World
     HittableList world;
-    world.add(make_shared<Sphere>(Point3( 0.0, -100.5, -1.0), 100.0, mat_ground));
-    world.add(make_shared<Sphere>(Point3( 0.0,    0.0, -1.0),   0.5, mat_center));
-    world.add(make_shared<Sphere>(Point3(-1.0,    0.0, -1.0),   0.5, mat_left));
-    world.add(make_shared<Sphere>(Point3(-1.0,    0.0, -1.0),  -0.4, mat_left));
-    world.add(make_shared<Sphere>(Point3( 1.0,    0.0, -1.0),   0.5, mat_right));
+    world.add(make_shared<Sphere>(Point3( 0.0, -100.5, -1.0), 100.0, ground));
+    world.add(make_shared<Sphere>(Point3( 0.5,    0.0, -1.0),   0.5, checkers));
+    world.add(make_shared<Sphere>(Point3(-0.5,    0.0, -1.0),   0.5, metal));
 
     // Create PPM image
     // Header

@@ -1,6 +1,6 @@
 #include "sphere.h"
 
-#include <cmath>
+#include <math_utils.h>
 
 Sphere::Sphere(Point3 center, double radius, MaterialPtr material)
     : m_center(center), m_radius(radius), m_material(material)
@@ -42,5 +42,27 @@ bool Sphere::Hit(const Ray& ray,
     const auto outward_normal = (o_rec.p - m_center) / m_radius;
     o_rec.SetFaceNormal(ray, outward_normal);
 
+    // Calculate uv coordinates
+    get_uv(outward_normal, o_rec.u, o_rec.v);
+
     return true;
+}
+
+void Sphere::get_uv(const Point3& p,
+                    double& o_u,
+                    double& o_v)
+{
+    // Calculate angles from origin to
+    const auto phi = atan2(-p.z(), p.x()) + PI;
+    const auto theta = acos(-p.y());
+
+    // Normalize into [0, 1] range
+
+    // u goes counter-clockwise from side to side, which means
+    // it should be divided by the whole circumference.
+    o_u = phi / (2*PI);
+
+    // u goes from facing down to facing up, and covers only
+    // half the circumference.
+    o_v = theta / PI;
 }

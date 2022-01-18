@@ -19,6 +19,8 @@ struct HitRecord
     Vec3 normal;          // Surface normal
     MaterialPtr material; // Surface material
     double t;             // t for which the ray hits
+    double u;             // Surface coordinates
+    double v;             // Surface coordinates
     bool front_face;      // Whether the ray hit a front or back face
 
     inline void SetFaceNormal(const Ray& ray, const Vec3& outward_normal)
