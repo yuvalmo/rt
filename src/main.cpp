@@ -7,7 +7,7 @@
 #include "lambertian.h"
 #include "metal.h"
 #include "dielectric.h"
-#include "math_utils.h"
+#include "diffuse_light.h"
 
 #include "image.h"
 #include "texture/checker.h"
@@ -17,7 +17,10 @@
 using std::make_shared;
 
 
-Color RayColor(const Ray& ray, const Hittable& world, int depth)
+Color RayColor(const Ray& ray,
+               const Color& background,
+               const Hittable& world,
+               int depth)
 {
     HitRecord hit;
 
@@ -28,34 +31,31 @@ Color RayColor(const Ray& ray, const Hittable& world, int depth)
         return {0, 0, 0};
     }
 
-    // Check for hits
-    if (world.Hit(ray, 0.001, INFINITY, hit))
+    // If ray hits nothing, return the background color
+    if (!world.Hit(ray, 0.001, INFINITY, hit))
     {
-        Ray scattered;
-        Color attenuation;
-
-        if (hit.material->Scatter(ray, hit, attenuation, scattered))
-        {
-            // Gather the color of the scattered ray, and factor out
-            // absorbed light.
-            return attenuation * RayColor(scattered, world, depth-1);
-        }
-
-        // Light was fully absorbed
-        return {0, 0, 0};
+        return background;
     }
 
-    // Normalize vector to [-1 < y < 1]
-    const auto unit_direction = unit_vector(ray.Direction());
+    // Calculate emitted light from hit
+    const auto emitted = hit.material->Emitted(hit.u, hit.v, hit.p);
 
-    // Scale to [0 < y < 1]
-    const auto t = 0.5 * (unit_direction.y() + 1.0);
+    Ray scattered;
+    Color attenuation;
 
-    // Gradient between these two colors
-    const auto white = Color(1.0, 1.0, 1.0);
-    const auto blue  = Color(0.5, 0.7, 1.0);
+    if (!hit.material->Scatter(ray, hit, attenuation, scattered))
+    {
+        // If ray was not scattered, return the emitted light.
+        return emitted;
+    }
 
-    return (1.0-t)*white + t*blue;
+    // Gather the color of emitted light, the scattered ray,
+    // and factor out absorbed light.
+    return emitted + attenuation * RayColor(
+        scattered,
+        background,
+        world,
+        depth-1);
 }
 
 int main()
@@ -80,6 +80,9 @@ int main()
                                aspect_ratio,
                                aperture,
                                focus_dist);
+
+    // Background
+    const auto bg = Color(0, 0, 0);
 
     // Images
     const auto img = make_shared<Image>("images/earth-night.jpg");
@@ -121,7 +124,7 @@ int main()
                 const auto ray = camera.GetRay(u, v);
 
                 // Accumulate color for each sample
-                pixel += RayColor(ray, world, max_depth);
+                pixel += RayColor(ray, bg, world, max_depth);
             }
 
             // Write pixel

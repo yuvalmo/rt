@@ -28,4 +28,17 @@ public:
                          const HitRecord& hit,
                          Color& o_attenuation,
                          Ray& o_scattered) const = 0;
+
+    /**
+     * Return how much light is emitted from the material's
+     * surface in a given coordinate.
+     *
+     * A material emits no light by default.
+     */
+    virtual Color Emitted(double u,
+                          double v,
+                          const Point3& p) const
+    {
+        return {0, 0, 0};
+    }
 };
