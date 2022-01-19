@@ -12,6 +12,7 @@
 #include "image.h"
 #include "texture/checker.h"
 #include "texture/image_texture.h"
+#include "texture/modifiers.h"
 
 using std::make_shared;
 
@@ -82,12 +83,13 @@ int main()
 
     // Images
     const auto img = make_shared<Image>("images/earth-night.jpg");
+    const auto earthmap = make_shared<ImageTexture>(img)
+        | offset_u{0.3};
 
     // Materials
-    const auto ground   = make_shared<Lambertian>(Color(0.8, 0.8, 0.0));
-    const auto metal    = make_shared<Metal>(Color(0.5, 0.5, 0.5), 0.1);
-    const auto earth =
-        make_shared<Lambertian>(make_shared<ImageTexture>(img));
+    const auto ground = make_shared<Lambertian>(Color(0.8, 0.8, 0.0));
+    const auto metal  = make_shared<Metal>(Color(0.5, 0.5, 0.5), 0.1);
+    const auto earth  = make_shared<Lambertian>(earthmap);
 
     // World
     HittableList world;
