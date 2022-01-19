@@ -93,12 +93,12 @@ int main()
     const auto ground = make_shared<Lambertian>(Color(0.8, 0.8, 0.0));
     const auto metal  = make_shared<Metal>(Color(0.5, 0.5, 0.5), 0.1);
     const auto earth  = make_shared<Lambertian>(earthmap);
+    const auto light  = make_shared<DiffuseLight>(Color(10, 10, 10));
 
     // World
     HittableList world;
-    world.add(make_shared<Sphere>(Point3( 0.0, -100.5, -1.0), 100.0, ground));
-    world.add(make_shared<Sphere>(Point3( 0.5,    0.0, -1.0),   0.5, earth));
-    world.add(make_shared<Sphere>(Point3(-0.5,    0.0, -1.0),   0.5, metal));
+    world.add(make_shared<Sphere>(Point3(  0.0,  0.0,  -1.0),  0.5, earth));
+    world.add(make_shared<Sphere>(Point3(-15.0, 15.0, -15.0), 10.0, light));
 
     // Create PPM image
     // Header
