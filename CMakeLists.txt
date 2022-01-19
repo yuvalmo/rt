@@ -18,6 +18,9 @@ add_executable(rt
     ${SOURCES}
 )
 
+# Copy images to build directory
+file(COPY images DESTINATION ${CMAKE_BINARY_DIR})
+
 # Test
 enable_testing()
 

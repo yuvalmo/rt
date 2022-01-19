@@ -9,7 +9,9 @@
 #include "dielectric.h"
 #include "math_utils.h"
 
+#include "image.h"
 #include "texture/checker.h"
+#include "texture/image_texture.h"
 
 using std::make_shared;
 
@@ -78,17 +80,19 @@ int main()
                                aperture,
                                focus_dist);
 
+    // Images
+    const auto img = make_shared<Image>("images/earth-night.jpg");
+
     // Materials
     const auto ground   = make_shared<Lambertian>(Color(0.8, 0.8, 0.0));
     const auto metal    = make_shared<Metal>(Color(0.5, 0.5, 0.5), 0.1);
-    const auto checkers = make_shared<Lambertian>(
-        make_shared<CheckerTexture>(Color(0.0, 0.0, 0.0),
-                                    Color(1.0, 1.0, 1.0)));
+    const auto earth =
+        make_shared<Lambertian>(make_shared<ImageTexture>(img));
 
     // World
     HittableList world;
     world.add(make_shared<Sphere>(Point3( 0.0, -100.5, -1.0), 100.0, ground));
-    world.add(make_shared<Sphere>(Point3( 0.5,    0.0, -1.0),   0.5, checkers));
+    world.add(make_shared<Sphere>(Point3( 0.5,    0.0, -1.0),   0.5, earth));
     world.add(make_shared<Sphere>(Point3(-0.5,    0.0, -1.0),   0.5, metal));
 
     // Create PPM image
