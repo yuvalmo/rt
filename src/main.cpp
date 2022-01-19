@@ -76,7 +76,7 @@ int main()
     const auto camera = Camera(lookfrom,
                                lookat,
                                Vec3(0, 1, 0),
-                               20.0,
+                               40.0,
                                aspect_ratio,
                                aperture,
                                focus_dist);
@@ -85,20 +85,26 @@ int main()
     const auto bg = Color(0, 0, 0);
 
     // Images
-    const auto img = make_shared<Image>("images/earth-night.jpg");
-    const auto earthmap = make_shared<ImageTexture>(img)
+    const auto earthimg = make_shared<Image>("images/earth.jpg");
+    const auto earthmap = make_shared<ImageTexture>(earthimg)
         | offset_u{0.3};
+
+    const auto sunset = make_shared<Image>("images/sunset.jpg");
+    const auto skymap = make_shared<ImageTexture>(sunset)
+        | flip_v()
+        | offset_u{0.5};
 
     // Materials
     const auto ground = make_shared<Lambertian>(Color(0.8, 0.8, 0.0));
     const auto metal  = make_shared<Metal>(Color(0.5, 0.5, 0.5), 0.1);
     const auto earth  = make_shared<Lambertian>(earthmap);
     const auto light  = make_shared<DiffuseLight>(Color(10, 10, 10));
+    const auto sky    = make_shared<DiffuseLight>(skymap);
 
     // World
     HittableList world;
-    world.add(make_shared<Sphere>(Point3(  0.0,  0.0,  -1.0),  0.5, earth));
-    world.add(make_shared<Sphere>(Point3(-15.0, 15.0, -15.0), 10.0, light));
+    world.add(make_shared<Sphere>(Point3(0, 0, -1.0),    0.5, metal));
+    world.add(make_shared<Sphere>(Point3(0, 0,  0.0), -100.0, sky));
 
     // Create PPM image
     // Header
